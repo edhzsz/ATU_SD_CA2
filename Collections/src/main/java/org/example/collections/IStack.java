@@ -1,8 +1,8 @@
 package org.example.collections;
 
 /**
- *
- * @param <T>
+ * Defines the contract for collections that behave as Stacks
+ * @param <T> Type of the elements that will be stored in this stack
  */
 public interface IStack<T> {
     /**
@@ -16,7 +16,7 @@ public interface IStack<T> {
      * object as the value of this function.
      *
      * @return The object at the top of this stack
-     * @throws EmptyStackException as appropriate
+     * @throws EmptyStackException if the method is called on an empty stack
      */
     T pop();
 
@@ -25,7 +25,7 @@ public interface IStack<T> {
      * from the stack.
      *
      * @return the object at the top of this stack
-     * @throws EmptyStackException as appropriate
+     * @throws EmptyStackException if the method is called on an empty stack
      */
     T peek();
 

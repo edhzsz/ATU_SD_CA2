@@ -1,8 +1,8 @@
 package org.example.collections;
 
 /**
- *
- * @param <T>
+ * Defines the contract for collections that behave as Queues
+ * @param <T> Type of the elements that will be stored in this queue
  */
 public interface IQueue<T> {
     /**
@@ -15,7 +15,7 @@ public interface IQueue<T> {
      * Retrieves and removes the head of this queue.
      *
      * @return the head of this queue
-     * @throws NoSuchElementException as appropriate
+     * @throws NoSuchElementException if the queue is empty
      */
     T dequeue();
 
@@ -23,7 +23,7 @@ public interface IQueue<T> {
      * Retrieves, but does not remove, the head of this queue.
      *
      * @return the head of this queue
-     * @throws NoSuchElementException as appropriate
+     * @throws NoSuchElementException if the queue is emptyG
      */
     T first();
 
