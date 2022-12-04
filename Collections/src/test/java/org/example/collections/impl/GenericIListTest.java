@@ -254,4 +254,15 @@ class GenericIListTest {
         assertTrue(instance.remove(newSecondPerson));
         assertFalse(instance.contains(secondPerson));
     }
+
+    @ParameterizedTest
+    @MethodSource("withAllPersonsListsImplProvider")
+    void we_can_iterate_over_the_list_elements(IList<Person> instance) {
+        int count = 0;
+        for (Person p : instance) {
+            assertNotNull(p);
+            assertEquals(persons.get(count), p);
+            count++;
+        }
+    }
 }
