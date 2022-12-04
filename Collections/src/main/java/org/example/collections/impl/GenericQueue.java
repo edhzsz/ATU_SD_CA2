@@ -26,7 +26,7 @@ public class GenericQueue<T> implements IQueue<T> {
      */
     @Override
     public void enqueue(T element) {
-
+        backingList.add(element);
     }
 
     /**
@@ -37,7 +37,11 @@ public class GenericQueue<T> implements IQueue<T> {
      */
     @Override
     public T dequeue() {
-        return null;
+        if(backingList.isEmpty()) {
+            throw new NoSuchElementException("Queue is empty!");
+        }
+
+        return backingList.remove(0);
     }
 
     /**
@@ -48,7 +52,11 @@ public class GenericQueue<T> implements IQueue<T> {
      */
     @Override
     public T first() {
-        return null;
+        if(backingList.isEmpty()) {
+            throw new NoSuchElementException("Queue is empty!");
+        }
+
+        return backingList.get(0);
     }
 
     /**
@@ -59,6 +67,6 @@ public class GenericQueue<T> implements IQueue<T> {
      */
     @Override
     public boolean empty() {
-        return false;
+        return backingList.isEmpty();
     }
 }

@@ -127,7 +127,7 @@ class GenericQueueTest {
     }
 
     @ParameterizedTest
-    @MethodSource("withAllPersonsStacksImplProvider")
+    @MethodSource("withAllPersonsQueuesImplProvider")
     void dequeue_returns_the_elements_in_first_in_first_out_order(IQueue<Person> personsStack) {
         for (int i=0; i < persons.size(); i++) {
             assertEquals(persons.get(i), personsStack.first());

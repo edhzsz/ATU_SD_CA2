@@ -26,7 +26,7 @@ public class GenericStack<T> implements IStack<T> {
      */
     @Override
     public void push(T element) {
-
+        backingList.add(element);
     }
 
     /**
@@ -38,7 +38,11 @@ public class GenericStack<T> implements IStack<T> {
      */
     @Override
     public T pop() {
-        return null;
+        if(backingList.isEmpty()) {
+            throw new EmptyStackException("Stack is empty");
+        }
+
+        return backingList.remove(backingList.size() - 1);
     }
 
     /**
@@ -50,7 +54,11 @@ public class GenericStack<T> implements IStack<T> {
      */
     @Override
     public T peek() {
-        return null;
+        if(backingList.isEmpty()) {
+            throw new EmptyStackException("Stack is empty");
+        }
+
+        return backingList.get(backingList.size() - 1);
     }
 
     /**
@@ -61,6 +69,6 @@ public class GenericStack<T> implements IStack<T> {
      */
     @Override
     public boolean empty() {
-        return false;
+        return backingList.isEmpty();
     }
 }

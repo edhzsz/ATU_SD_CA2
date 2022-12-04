@@ -7,6 +7,35 @@ import org.example.collections.IList;
  * @param <T> Type of the elements that will be stored in this list.
  */
 public class GenericLinkedList<T> implements IList<T> {
+
+    /**
+     *  Linked list Node.
+     *
+     */
+    private class Node<T> {
+        T data;
+        Node next;
+
+        // Constructor to create a new node
+        Node(T d) {
+            data = d;
+            next = null;
+        }
+    }
+
+    private int elementsInList;
+
+    private Node<T> head;
+
+    private Node<T> tail;
+
+
+    public GenericLinkedList() {
+        elementsInList = 0;
+        head = null;
+        tail = null;
+    }
+
     /**
      * Append to the end of the list
      *
@@ -14,7 +43,15 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public void add(T elem) {
+        Node<T> node = new Node(elem);
 
+        if (tail == null) {
+            head = node;
+        } else {
+            tail.next = node;
+        }
+        tail = node;
+        elementsInList++;
     }
 
     /**
@@ -26,7 +63,19 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0 || index > elementsInList) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+        Node<T> curr = head;
+        int count = 0;
+
+        while(count < index) {
+            curr = curr.next;
+            count++;
+        }
+
+        return curr.data;
     }
 
     /**
@@ -36,7 +85,7 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public int size() {
-        return 0;
+        return elementsInList;
     }
 
     /**
@@ -50,7 +99,30 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public T remove(int index) {
-        return null;
+        if (index < 0 || index > elementsInList) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+        Node<T> prev = null;
+        Node<T> curr = head;
+        int count = 0;
+
+        while(count < index) {
+            prev = curr;
+            curr = curr.next;
+            count++;
+        }
+
+        if(prev == null) {
+            head = curr.next;
+        } else {
+            prev.next = curr.next;
+        }
+        if(curr == tail) {
+            tail = prev;
+        }
+        elementsInList--;
+        return curr.data;
     }
 
     /**
@@ -61,6 +133,26 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public boolean remove(T elem) {
+        Node<T> prev = null;
+        Node<T> node = head;
+
+        while(node != null) {
+            if (node.data.equals(elem)) {
+                if (prev == null) {
+                    head = node.next;
+                } else {
+                    prev.next = node.next;
+                }
+                if (node == tail) {
+                    tail = prev;
+                }
+                elementsInList--;
+                return true;
+            }
+            prev = node;
+            node = node.next;
+        }
+
         return false;
     }
 
@@ -71,7 +163,7 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return elementsInList == 0;
     }
 
     /**
@@ -82,6 +174,15 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public boolean contains(T element) {
+        Node<T> node = head;
+
+        while(node != null) {
+            if (node.data.equals(element)) {
+                return true;
+            }
+            node = node.next;
+        }
+
         return false;
     }
 }
