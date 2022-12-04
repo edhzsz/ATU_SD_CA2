@@ -32,7 +32,7 @@ class GenericQueueTest {
     }
 
     private static List<IQueue<Person>> buildWithPersonsQueues(Iterable<Person> persons) {
-        List<IQueue<Person>> stacks = new ArrayList<>() {
+        List<IQueue<Person>> queues = new ArrayList<>() {
             {
                 add(new GenericQueue<>());
                 add(new GenericQueue<>(new GenericArrayList<>()));
@@ -40,13 +40,13 @@ class GenericQueueTest {
             }
         };
 
-        for(IQueue<Person> q : stacks) {
+        for(IQueue<Person> q : queues) {
             for (Person p: persons) {
                 q.enqueue(p);
             }
         }
 
-        return stacks;
+        return queues;
     }
 
     private static List<IQueue<Person>> emptyQueuesImplProvider() {
@@ -63,6 +63,7 @@ class GenericQueueTest {
     private static List<IQueue<Person>> withAllPersonsQueuesImplProvider() {
         return buildWithPersonsQueues(persons);
     }
+
     @ParameterizedTest
     @MethodSource("emptyQueuesImplProvider")
     void a_new_queue_is_empty(IQueue<Person> empty) {

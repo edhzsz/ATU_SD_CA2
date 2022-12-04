@@ -54,7 +54,7 @@ public class GenericLinkedList<T> implements IList<T> {
     }
 
     /**
-     * Removes the given element from the list if it is contained in it/
+     * Removes the given element from the list if it is contained in it.
      *
      * @param elem the element to remove
      * @return whether the element was removed or not

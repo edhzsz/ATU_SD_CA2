@@ -1,9 +1,9 @@
 package org.example;
 
 public class Person implements Comparable<Person> {
-    private String firstname;
-    private String surname;
-    private int age;
+    protected String firstname;
+    protected String surname;
+    protected int age;
     public Person(int age, String surname, String firstname) {
         this.age = age;
         this.surname = surname;
