@@ -8,13 +8,49 @@ import org.example.collections.IList;
  */
 public class GenericArrayList<T> implements IList<T> {
     /**
+     * This will hold our data - remember an ArrayList is nothing more than a managed array
+     */
+    private T[] buffer;
+
+    /**
+     * This will change as buffer fills up and we allocate more and more storage space
+     */
+    private int currentCapacity;
+
+    /**
+     * Index of next free location - will also help us to determine if the buffer is full
+     */
+    private int nextFreeLoc;
+
+    private static final int INITIAL_CAPACITY = 4; // nice and small so that we test it quickly
+
+    public GenericArrayList() {
+        this(INITIAL_CAPACITY);
+    }
+
+    public GenericArrayList(int capacity) {
+        currentCapacity = capacity;
+        nextFreeLoc = 0;
+        buffer = (T[])new Object[capacity];
+    }
+
+    /**
      * Append to the end of the list
+     *
+     * Each time you need to grow the array you should declare a temporary array
+     * which is double the currentCapacity of buffer.
+     *
+     * Copy everything in buffer to tempArray
+     *
+     * Then update the buffer reference to refer to tempArray
      *
      * @param elem element that will be appended to the end of the list
      */
     @Override
     public void add(T elem) {
+        growArrayIfNeeded();
 
+        buffer[nextFreeLoc++] = elem;
     }
 
     /**
@@ -26,7 +62,11 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0 || index >= nextFreeLoc) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+
+        return buffer[index];
     }
 
     /**
@@ -36,7 +76,7 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public int size() {
-        return 0;
+        return nextFreeLoc;
     }
 
     /**
@@ -50,7 +90,20 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public T remove(int index) {
-        return null;
+        if (index < 0 || index >= nextFreeLoc) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+
+        T e = buffer[index];
+
+        for( int i = index; i<nextFreeLoc -  1; i++)
+        {
+            buffer[i] = buffer[i+1];
+        }
+
+        nextFreeLoc--;
+
+        return e;
     }
 
     /**
@@ -61,7 +114,24 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public boolean remove(T elem) {
-        return false;
+        boolean matchFound = false;
+        for (int index = 0; index < nextFreeLoc && !matchFound; index++)
+        {
+            if(buffer[index].equals(elem))
+            {
+                matchFound = true;
+
+                //Close the gap - move elements 1 position to the left
+                for( int i = index; i< buffer.length - 1; i++)
+                {
+                    buffer[i] = buffer[i+1];
+                }
+
+                nextFreeLoc--;
+            }
+        }
+
+        return matchFound;
     }
 
     /**
@@ -71,7 +141,7 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return nextFreeLoc == 0;
     }
 
     /**
@@ -82,6 +152,47 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public boolean contains(T element) {
+        for (T e : buffer){
+            if(e.equals(element)){
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * Private helper method to check if the currently allocated space is full.
+     * If it is then it will allocate a bigger array, copy the contents, and set our
+     * instance field (buffer) to refer to the newly allocated space.
+     */
+    private void growArrayIfNeeded()
+    {
+        if(nextFreeLoc == currentCapacity ) {
+            // Allocate double the space - that will keep us going for a while
+            int newCapacity = buffer.length * 2;
+            T[] tempArr = (T[])new Object[newCapacity];
+            currentCapacity = newCapacity;
+
+            // copy from the old space into the new
+            for(int i = 0; i < buffer.length - 1; i++){
+                tempArr[i] = buffer[i];
+            }
+
+            // Now, update so that our managed array points at the newly created array
+            buffer = tempArr;
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        String data = "";
+        for(int i = 0; i < nextFreeLoc; i++)
+        {
+            data += " " +buffer[i] + ",";
+        }
+
+        return "MyStringArrayList[" + data + " ]";
     }
 }

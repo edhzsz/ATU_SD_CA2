@@ -3,7 +3,6 @@ package org.example.collections.impl;
 import org.example.Person;
 import org.example.collections.IList;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -142,7 +141,7 @@ class GenericIListTest {
 
     @ParameterizedTest
     @MethodSource("emptyListsImplProvider")
-    void it_si_possible_to_add_the_same_element_twice(IList<Person> empty) {
+    void it_is_possible_to_add_the_same_element_twice(IList<Person> empty) {
         empty.add(persons.get(0));
         empty.add(persons.get(0));
 
@@ -182,8 +181,9 @@ class GenericIListTest {
     @ParameterizedTest
     @MethodSource("withOneElementListsImplProvider")
     void removing_first_element_on_a_single_element_list_makes_it_empty(IList<Person> instance) {
-        instance.remove(0);
+        Person first = instance.remove(0);
         assertTrue(instance.isEmpty());
+        assertEquals(persons.get(0), first);
     }
 
     @ParameterizedTest
@@ -219,7 +219,7 @@ class GenericIListTest {
     @MethodSource("withAllPersonsListsImplProvider")
     void we_can_remove_all_elements_on_empty_list_always_by_element(IList<Person> instance) {
         for (Person p : persons) {
-            assertFalse(instance.remove(p));
+            assertTrue(instance.remove(p));
         }
 
         assertTrue(instance.isEmpty());
@@ -240,7 +240,7 @@ class GenericIListTest {
     @ParameterizedTest
     @MethodSource("withAllEquitablePersonsListsImplProvider")
     void can_remove_an_element_if_element_does_override_equals(IList<Person> instance) {
-        Person secondPerson = persons.get(1);
+        Person secondPerson = equitablePersons.get(1);
         Person newSecondPerson = new EquitablePerson(secondPerson.getAge(), secondPerson.getSurname(), secondPerson.getFirstname());
 
         assertTrue(instance.contains(secondPerson));
