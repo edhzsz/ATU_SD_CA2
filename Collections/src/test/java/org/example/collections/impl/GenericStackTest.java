@@ -1,110 +1,147 @@
 package org.example.collections.impl;
 
+import org.example.Person;
 import org.example.collections.EmptyStackException;
 import org.example.collections.IStack;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.example.Person;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GenericStackTest {
-    private IStack<Person> empty;
-
-    private IStack<Person> personsStack;
-
-    private IStack<Person> withOneElement;
-
-    private static Person[] persons;
+    private static List<Person> persons;
 
     @BeforeAll
     static void initAll() {
-        persons = new Person[] {
-                new Person(41, "Hernandez", "Edgar")
+        persons = new ArrayList<>() {
+            {
+                add(new Person(41, "Hernandez", "Edgar"));
+                add(new Person(40, "Lopez", "Martha"));
+                add(new Person(12, "Hernandez", "Luna"));
+                add(new Person(1, "Hernandez", "Elessar"));
+            }
         };
     }
 
-    @BeforeEach
-    void setUp() {
-        empty = new GenericStack<>();
+    private static List<IStack<Person>> buildWithPersonsStacks(Iterable<Person> persons) {
+        List<IStack<Person>> stacks = new ArrayList<>() {
+            {
+                add(new GenericStack<>());
+                add(new GenericStack<>(new GenericArrayList<>()));
+                add(new GenericStack<>(new GenericLinkedList<>()));
+            }
+        };
 
-        withOneElement = new GenericStack<>();
-        withOneElement.push(persons[0]);
-
-        personsStack = new GenericStack<>();
-        for(Person p : persons) {
-            personsStack.push(p);
+        for(IStack<Person> s : stacks) {
+            for (Person p: persons) {
+                s.push(p);
+            }
         }
+
+        return stacks;
     }
 
-    @Test
-    void a_new_stack_is_empty() {
+    private static List<IStack<Person>> emptyStacksImplProvider() {
+        return buildWithPersonsStacks(new ArrayList<>());
+    }
+
+    private static List<IStack<Person>> withOneElementStacksImplProvider() {
+        List<Person> onePerson = new ArrayList<>();
+        onePerson.add(persons.get(0));
+
+        return buildWithPersonsStacks(onePerson);
+    }
+
+    private static List<IStack<Person>> withAllPersonsStacksImplProvider() {
+        return buildWithPersonsStacks(persons);
+    }
+
+    @ParameterizedTest
+    @MethodSource("emptyStacksImplProvider")
+    void a_new_stack_is_empty(IStack<Person> empty) {
         assertTrue(empty.empty());
     }
 
-    @Test
-    void a_new_stack_with_an_element_is_not_empty() {
+    @ParameterizedTest
+    @MethodSource("withOneElementStacksImplProvider")
+    void a_new_stack_with_an_element_is_not_empty(IStack<Person> withOneElement) {
         assertFalse(withOneElement.empty());
     }
 
-    @Test
-    void popping_all_elements_of_stack_makes_it_empty() {
+    @ParameterizedTest
+    @MethodSource("withAllPersonsStacksImplProvider")
+    void popping_all_elements_of_stack_makes_it_empty(IStack<Person> personsStack) {
         // Calling pop for each person in persons should
         // result in an empty array
-        for (int i=0; i<persons.length; i++) {
+        for (int i=0; i<persons.size(); i++) {
             personsStack.pop();
         }
 
         assertTrue(personsStack.empty());
     }
 
-    @Test
-    void peek_on_an_empty_stack_throws_EmptyStackException() {
+
+    @ParameterizedTest
+    @MethodSource("emptyStacksImplProvider")
+    void peek_on_an_empty_stack_throws_EmptyStackException(IStack<Person> empty) {
         assertThrows(EmptyStackException.class, () ->
                 empty.peek());
     }
 
-    @Test
-    void peek_on_a_stack_with_a_single_element_returns_the_only_element() {
-        assertEquals(persons[0], withOneElement.peek());
+    @ParameterizedTest
+    @MethodSource("withOneElementStacksImplProvider")
+    void peek_on_a_stack_with_a_single_element_returns_the_only_element(IStack<Person> withOneElement) {
+        assertEquals(persons.get(0), withOneElement.peek());
     }
 
-    @Test
-    void peek_returns_the_last_element_pushed_into_the_stack() {
-        Person lastPerson = persons[persons.length - 1];
+    @ParameterizedTest
+    @MethodSource("withAllPersonsStacksImplProvider")
+    void peek_returns_the_last_element_pushed_into_the_stack(IStack<Person> personsStack) {
+        Person lastPerson = persons.get(persons.size() - 1);
         assertEquals(lastPerson, personsStack.peek());
     }
 
-    @Test
-    void pop_on_an_empty_stack_throws_EmptyStackException() {
+
+    @ParameterizedTest
+    @MethodSource("emptyStacksImplProvider")
+    void pop_on_an_empty_stack_throws_EmptyStackException(IStack<Person> empty) {
         assertThrows(EmptyStackException.class, () ->
                 empty.pop());
     }
 
-    @Test
-    void pop_on_a_stack_with_a_single_element_returns_the_only_element() {
-        assertEquals(persons[0], withOneElement.pop());
+    @ParameterizedTest
+    @MethodSource("withOneElementStacksImplProvider")
+    void pop_on_a_stack_with_a_single_element_returns_the_only_element(IStack<Person> withOneElement) {
+        assertEquals(persons.get(0), withOneElement.pop());
     }
 
-    @Test
-    void pop_returns_the_last_element_pushed_into_the_stack() {
-        Person lastPerson = persons[persons.length - 1];
+    @ParameterizedTest
+    @MethodSource("withAllPersonsStacksImplProvider")
+    void pop_returns_the_last_element_pushed_into_the_stack(IStack<Person> personsStack) {
+        Person lastPerson = persons.get(persons.size() - 1);
         assertEquals(lastPerson, personsStack.pop());
     }
 
-    @Test
-    void pop_returns_the_elements_in_last_in_first_out_order() {
-        for (int i=persons.length - 1; i >= 0; i--) {
-            assertEquals(persons[i], personsStack.peek());
-            assertEquals(persons[i], personsStack.pop());
+    @ParameterizedTest
+    @MethodSource("withAllPersonsStacksImplProvider")
+    void pop_returns_the_elements_in_last_in_first_out_order(IStack<Person> personsStack) {
+        for (int i=persons.size() - 1; i >= 0; i--) {
+            assertEquals(persons.get(i), personsStack.peek());
+            assertEquals(persons.get(i), personsStack.pop());
         }
     }
 
-    @Test
-    void is_possible_to_push_the_same_element_twice() {
-        empty.push(persons[0]);
-        empty.push(persons[0]);
+
+    @ParameterizedTest
+    @MethodSource("emptyStacksImplProvider")
+    void is_possible_to_push_the_same_element_twice(IStack<Person> empty) {
+        empty.push(persons.get(0));
+        empty.push(persons.get(0));
 
         // How many elements are in the stack?
         int count = 0;

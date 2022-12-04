@@ -1,5 +1,6 @@
 package org.example.collections.impl;
 
+import org.example.collections.IList;
 import org.example.collections.IStack;
 import org.example.collections.EmptyStackException;
 
@@ -8,6 +9,16 @@ import org.example.collections.EmptyStackException;
  * @param <T> Type of the elements that will be stored in this stack
  */
 public class GenericStack<T> implements IStack<T> {
+    private IList<T> backingList;
+
+    public GenericStack() {
+        this(new GenericArrayList<T>());
+    }
+
+    public GenericStack(IList<T> backingList) {
+        this.backingList = backingList;
+    }
+
     /**
      * Pushes an item onto the top of this stack
      *
