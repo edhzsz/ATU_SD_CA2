@@ -1,5 +1,6 @@
 package org.example.collections.impl;
 
+import org.example.collections.IList;
 import org.example.collections.IQueue;
 import org.example.collections.NoSuchElementException;
 
@@ -8,6 +9,16 @@ import org.example.collections.NoSuchElementException;
  * @param <T> Type of the elements that will be stored in this queue
  */
 public class GenericQueue<T> implements IQueue<T> {
+    private IList<T> backingList;
+
+    public GenericQueue() {
+        this(new GenericArrayList<T>());
+    }
+
+    public GenericQueue(IList<T> backingList) {
+        this.backingList = backingList;
+    }
+
     /**
      * Inserts the specified element into the queue
      *
