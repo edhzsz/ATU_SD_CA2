@@ -54,6 +54,12 @@ class GenericIListTest {
                 add(new Person(40, "Lopez", "Martha"));
                 add(new Person(12, "Hernandez", "Luna"));
                 add(new Person(1, "Hernandez", "Elessar"));
+                add(new Person(20, "Hernandez", "Omar"));
+                add(new Person(67, "Hernandez", "Carlos"));
+                add(new Person(45, "Hernandez", "Carlos"));
+                add(new Person(65, "Sanchez", "Silvia"));
+                add(new Person(65, "Chavez", "Martha"));
+                add(new Person(91, "Montes", "Eloisa"));
             }
         };
 
