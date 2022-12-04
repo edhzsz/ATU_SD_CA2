@@ -1,6 +1,7 @@
 package org.example.collections.impl;
 
 import org.example.collections.IList;
+import org.example.collections.NoSuchElementException;
 
 import java.util.Iterator;
 
@@ -15,7 +16,7 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     private class Node<T> {
         T data;
-        Node next;
+        Node<T> next;
 
         // Constructor to create a new node
         Node(T d) {
@@ -44,7 +45,7 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public void add(T elem) {
-        Node<T> node = new Node(elem);
+        Node<T> node = new Node<T>(elem);
 
         if (tail == null) {
             head = node;
@@ -194,6 +195,47 @@ public class GenericLinkedList<T> implements IList<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new GenericLinkedListIterator();
+    }
+
+
+    private class GenericLinkedListIterator implements Iterator<T>{
+        private Node<T> currentNode = head;
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return currentNode != null;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public T next() {
+            if(currentNode == null){
+                throw new NoSuchElementException();
+            }
+            Node<T> temp = currentNode;
+            currentNode = currentNode.next;
+
+            return temp.data;
+        }
+
+        @Override
+        //You do not have to provide functionality for the remove() method
+        //We already have (non-iterator) mechanism for removing elements
+        public void remove() {
+            throw new UnsupportedOperationException("not supported yet");
+        }
     }
 }

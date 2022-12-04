@@ -1,6 +1,7 @@
 package org.example.collections.impl;
 
 import org.example.collections.IList;
+import org.example.collections.NoSuchElementException;
 
 import java.util.Iterator;
 
@@ -206,6 +207,42 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new GenericArrayListIterator();
+    }
+
+    private class GenericArrayListIterator implements Iterator<T>{
+        private int cursor = 0;
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return cursor < nextFreeLoc;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public T next() {
+            if(cursor == nextFreeLoc){
+                throw new NoSuchElementException();
+            }
+            return buffer[cursor++];
+        }
+
+        @Override
+        //You do not have to provide functionality for the remove() method
+        //We already have (non-iterator) mechanism for removing elements
+        public void remove() {
+            throw new UnsupportedOperationException("not supported yet");
+        }
     }
 }
