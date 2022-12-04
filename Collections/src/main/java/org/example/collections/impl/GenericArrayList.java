@@ -154,7 +154,8 @@ public class GenericArrayList<T> implements IList<T> {
      */
     @Override
     public boolean contains(T element) {
-        for (T e : buffer){
+        for(int i = 0; i<nextFreeLoc; i++) {
+            T e = buffer[i];
             if(e.equals(element)){
                 return true;
             }
@@ -177,7 +178,7 @@ public class GenericArrayList<T> implements IList<T> {
             currentCapacity = newCapacity;
 
             // copy from the old space into the new
-            for(int i = 0; i < buffer.length - 1; i++){
+            for(int i = 0; i < buffer.length; i++){
                 tempArr[i] = buffer[i];
             }
 
