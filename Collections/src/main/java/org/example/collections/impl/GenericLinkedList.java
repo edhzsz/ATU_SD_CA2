@@ -2,12 +2,13 @@ package org.example.collections.impl;
 
 import org.example.collections.IList;
 
+import java.util.Iterator;
+
 /**
  * A generic list backed by a linked list. Implements the IList interface.
  * @param <T> Type of the elements that will be stored in this list.
  */
 public class GenericLinkedList<T> implements IList<T> {
-
     /**
      *  Linked list Node.
      *
@@ -184,5 +185,15 @@ public class GenericLinkedList<T> implements IList<T> {
         }
 
         return false;
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return null;
     }
 }

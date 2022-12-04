@@ -4,7 +4,7 @@ package org.example.collections;
  * Defines the contract for collections that behave as Lists
  * @param <T> Type of the elements that will be stored in this list
  */
-public interface IList<T> {
+public interface IList<T> extends Iterable<T> {
     /**
      * Append to the end of the list
      * @param elem element that will be appended to the end of the list

@@ -2,6 +2,8 @@ package org.example.collections.impl;
 
 import org.example.collections.IList;
 
+import java.util.Iterator;
+
 /**
  * A generic list backed by an array. Implements the IList interface.
  * @param <T> Type of the elements that will be stored in this list.
@@ -194,5 +196,15 @@ public class GenericArrayList<T> implements IList<T> {
         }
 
         return "MyStringArrayList[" + data + " ]";
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return null;
     }
 }
