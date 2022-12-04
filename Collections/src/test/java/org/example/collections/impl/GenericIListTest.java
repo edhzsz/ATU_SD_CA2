@@ -2,9 +2,7 @@ package org.example.collections.impl;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class GenericArrayListTest {
+class GenericIListTest {
 
     @Test
     void add() {
@@ -28,6 +26,7 @@ class GenericArrayListTest {
 
     @Test
     void isEmpty() {
+
     }
 
     @Test
